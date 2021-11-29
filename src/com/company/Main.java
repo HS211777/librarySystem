@@ -11,10 +11,11 @@ public class Main {
 
     private static ArrayList<ArrayList<String>> booksArray = new ArrayList<>();
     private static File booksFile = new File("books.txt");
+
     public static void main(String[] args) {
+        createFile();
         boolean end = false;
         while (!end){
-            createFile();
             int selection = mainMenu();
             if (selection == 1){
                 addBook();
@@ -23,7 +24,8 @@ public class Main {
                 printBooks();
             }
             else if (selection == 3){
-                deleteBook(findBook());
+                System.out.println("Enter the name of the book:");
+                deleteBook(findBook(inputString()));
             }
             else if (selection == 4){
                 end = true;
@@ -74,6 +76,28 @@ public class Main {
 
     public static void deleteBook(int bookIndex){
         //find a book name and delete that line of the file
+        ArrayList<String> savedBooks = new ArrayList<>();
+        FileWriter myWriter = new FileWriter(booksFile.getName(),true);
+        try{
+            Scanner myReader = new Scanner(booksFile);
+            int count = 0;
+            while(myReader.hasNextLine()) {
+                if (count != bookIndex){
+                    savedBooks.add(myReader.nextLine());
+                }
+                count++;
+            }
+            deleteFileContents();
+            for (int i = 0; i < savedBooks.size(); i++){
+                myWriter.write(savedBook.get(i));
+            }
+            myReader.close();
+            myWriter.close();
+        }
+        catch (IOException e){
+            System.out.println("an Error occurred");
+            e.printStackTrace();
+        }
     }
 
     public static int mainMenu(){
@@ -129,8 +153,36 @@ public class Main {
             e.printStackTrace();
         }
     }
-    public static int findBook(){
+    public static int findBook(String name){
         //finds the index of a book with a given title
-        return 0;
+        int lineCount = 0;
+        try{
+            Scanner myReader = new Scanner(booksFile);
+            while(myReader.hasNextLine()) {
+                int charCount = 0;
+                for (int i = 0; i < myReader.nextLine().length(); i++) {
+                    if (myReader.nextLine.charAt(i) == ',') {
+                        break;
+                    } else {
+                        charCount++;
+                    }
+                }
+                if (myReader.nextLine().subString(0, charCount + 1).equals(name)) {
+                    break;
+                } else {
+                    lineCount++;
+                }
+            }
+        }
+        catch (IOException e){
+            System.out.println("an Error occurred");
+            e.printStackTrace();
+        }
+        return lineCount;
+    }
+
+    public static void deleteFileContents(){
+        FileWriter myWriter = new FileWriter(booksFile.getName(),false);
+        myWriter.write();
     }
 }
