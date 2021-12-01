@@ -156,7 +156,7 @@ public class Main {
     public static int findBook(String name){
         //finds the index of a book with a given title
         int lineCount = 1;
-        //int lineKey = 0;
+        int lineKey = 0;
         try{
             Scanner myReader = new Scanner(booksFile);
             while(myReader.hasNextLine()) {
@@ -171,8 +171,7 @@ public class Main {
                     }
                 }
                 if (currentLine.substring(0, numChars + 1).equals(name)) {
-                    //lineKey = lineCount;
-                    break;
+                    lineKey = lineCount;
                 } else {
                     lineCount++;
                 }
@@ -182,7 +181,7 @@ public class Main {
             System.out.println("an Error occurred");
             e.printStackTrace();
         }
-        return lineCount;
+        return lineKey;
     }
 
     public static void deleteFileContents(){
