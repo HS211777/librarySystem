@@ -75,12 +75,13 @@ public class Main {
 
     public static void deleteBook(int bookIndex){
         //find a book name and delete that line of the file
+        //System.out.println(bookIndex);
         try{
             ArrayList<String> savedBooks = new ArrayList<>();
             FileWriter myWriter = new FileWriter(booksFile.getName(),true);
             Scanner myReader = new Scanner(booksFile);
             int count = 0;
-            while(myReader.hasNextLine()) {
+            while(myReader.hasNextLine()) { //saves all but 1 line to an arraylist
                 String currentLine = myReader.nextLine();
                 if (count != bookIndex){
                     savedBooks.add(currentLine);
@@ -88,7 +89,7 @@ public class Main {
                 count++;
             }
             deleteFileContents();
-            for (int i = 0; i < savedBooks.size(); i++){
+            for (int i = 0; i < savedBooks.size(); i++){ //prints arraylist into file
                 myWriter.write(savedBooks.get(i)+"\n");
             }
             myReader.close();
@@ -155,22 +156,15 @@ public class Main {
     }
     public static int findBook(String name){
         //finds the index of a book with a given title
-        int lineCount = 1;
+        int lineCount = 0;
         int lineKey = 0;
         try{
             Scanner myReader = new Scanner(booksFile);
             while(myReader.hasNextLine()) {
-                int charCount = 0;
-                int numChars = 0;
                 String currentLine = myReader.nextLine();
-                for (int i = 0; i < currentLine.length(); i++) {
-                    if (currentLine.charAt(i) == ',') {
-                        numChars = charCount;
-                    } else {
-                        charCount++;
-                    }
-                }
-                if (currentLine.substring(0, numChars + 1).equals(name)) {
+                String splitList[] = currentLine.split(",");
+                //System.out.println(splitList[0]);
+                if (splitList[0].equals(name)) {
                     lineKey = lineCount;
                 } else {
                     lineCount++;
