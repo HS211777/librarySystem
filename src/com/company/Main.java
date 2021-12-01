@@ -23,7 +23,7 @@ public class Main {
                 printBooks();
             }
             else if (selection == 3){
-                System.out.println("Enter the name of the book:");
+                System.out.println("Enter the name of the book: (if there are spaces use _ instead)");
                 deleteBook(findBook(inputString()));
             }
             else if (selection == 4){
@@ -45,7 +45,7 @@ public class Main {
             String ISBN = inputString();
             System.out.println("Author:");
             String Author = inputString();
-            System.out.println("Genre:");
+            System.out.println("Genre: (if there are spaces use _ instead)");
             String Genre = inputString();
 
             String toFile = title+","+ISBN+","+Author+","+Genre+"\n";
