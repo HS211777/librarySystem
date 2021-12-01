@@ -27,6 +27,31 @@ public class Main {
                 deleteBook(findBook(inputString()));
             }
             else if (selection == 4){
+                System.out.println("What is the name of the book you want to amend");
+                String bookName = inputString();
+                System.out.println("Which part would you like to amend?");
+                System.out.println("1 - Title");
+                System.out.println("2 - ISBN");
+                System.out.println("3 - Author");
+                System.out.println("4 - Genre");
+                int selection1 = inputInt();
+                if (selection1 == 1){
+                    amendTitle(findBook(bookName));
+                }
+                else if (selection1 == 2){
+                    amendISBN(findBook(bookName));
+                }
+                else if (selection1 == 3){
+                    amendAuthor(findBook(bookName));
+                }
+                else if (selection1 == 4){
+                    amendGenre(findBook(bookName));
+                }
+                else{
+                    System.out.println("Please select a valid option");
+                }
+            }
+            else if (selection == 5){
                 end = true;
             }
             else{
@@ -106,7 +131,8 @@ public class Main {
         System.out.println("1 - add a book to the system");
         System.out.println("2 - see the book list");
         System.out.println("3 - remove a book from the system");
-        System.out.println("4 - exit");
+        System.out.println("4 - amend a book");
+        System.out.println("5 - exit");
         return inputInt();
     }
 
@@ -188,5 +214,121 @@ public class Main {
             e.printStackTrace();
         }
 
+    }
+    public static void amendTitle(int bookIndex){
+        try{
+            ArrayList<String> savedBooks = new ArrayList<>();
+            FileWriter myWriter = new FileWriter(booksFile.getName(),true);
+            Scanner myReader = new Scanner(booksFile);
+            while(myReader.hasNextLine()) { //saves all but 1 line to an arraylist
+                String currentLine = myReader.nextLine();
+                savedBooks.add(currentLine);
+            }
+            deleteFileContents();
+            String splitLine[] = savedBooks.get(bookIndex).split(",");
+            System.out.println("Enter the correct Title: (if there are spaces use _ instead)");
+            splitLine[0] = inputString();
+            String compileLine = "";
+            for (int i = 0; i < 4; i++){
+                compileLine = compileLine + splitLine[i] + ",";
+            }
+            savedBooks.set(bookIndex,compileLine);
+            for (int i = 0; i < savedBooks.size(); i++){ //prints arraylist into file
+                myWriter.write(savedBooks.get(i)+"\n");
+            }
+            myReader.close();
+            myWriter.close();
+        }
+        catch (IOException e){
+            System.out.println("an Error occurred");
+            e.printStackTrace();
+        }
+    }
+    public static void amendISBN(int bookIndex){
+        try{
+            ArrayList<String> savedBooks = new ArrayList<>();
+            FileWriter myWriter = new FileWriter(booksFile.getName(),true);
+            Scanner myReader = new Scanner(booksFile);
+            while(myReader.hasNextLine()) { //saves all but 1 line to an arraylist
+                String currentLine = myReader.nextLine();
+                savedBooks.add(currentLine);
+            }
+            deleteFileContents();
+            String splitLine[] = savedBooks.get(bookIndex).split(",");
+            System.out.println("Enter the correct ISBN:");
+            splitLine[1] = inputString();
+            String compileLine = "";
+            for (int i = 0; i < 4; i++){
+                compileLine = compileLine + splitLine[i] + ",";
+            }
+            savedBooks.set(bookIndex,compileLine);
+            for (int i = 0; i < savedBooks.size(); i++){ //prints arraylist into file
+                myWriter.write(savedBooks.get(i)+"\n");
+            }
+            myReader.close();
+            myWriter.close();
+        }
+        catch (IOException e){
+            System.out.println("an Error occurred");
+            e.printStackTrace();
+        }
+    }
+    public static void amendAuthor(int bookIndex){
+        try{
+            ArrayList<String> savedBooks = new ArrayList<>();
+            FileWriter myWriter = new FileWriter(booksFile.getName(),true);
+            Scanner myReader = new Scanner(booksFile);
+            while(myReader.hasNextLine()) { //saves all but 1 line to an arraylist
+                String currentLine = myReader.nextLine();
+                savedBooks.add(currentLine);
+            }
+            deleteFileContents();
+            String splitLine[] = savedBooks.get(bookIndex).split(",");
+            System.out.println("Enter the correct Author: (if there are spaces use _ instead)");
+            splitLine[2] = inputString();
+            String compileLine = "";
+            for (int i = 0; i < 4; i++){
+                compileLine = compileLine + splitLine[i] + ",";
+            }
+            savedBooks.set(bookIndex,compileLine);
+            for (int i = 0; i < savedBooks.size(); i++){ //prints arraylist into file
+                myWriter.write(savedBooks.get(i)+"\n");
+            }
+            myReader.close();
+            myWriter.close();
+        }
+        catch (IOException e){
+            System.out.println("an Error occurred");
+            e.printStackTrace();
+        }
+    }
+    public static void amendGenre(int bookIndex){
+        try{
+            ArrayList<String> savedBooks = new ArrayList<>();
+            FileWriter myWriter = new FileWriter(booksFile.getName(),true);
+            Scanner myReader = new Scanner(booksFile);
+            while(myReader.hasNextLine()) { //saves all but 1 line to an arraylist
+                String currentLine = myReader.nextLine();
+                savedBooks.add(currentLine);
+            }
+            deleteFileContents();
+            String splitLine[] = savedBooks.get(bookIndex).split(",");
+            System.out.println("Enter the correct Genre: (if there are spaces use _ instead)");
+            splitLine[3] = inputString();
+            String compileLine = "";
+            for (int i = 0; i < 4; i++){
+                compileLine = compileLine + splitLine[i] + ",";
+            }
+            savedBooks.set(bookIndex,compileLine);
+            for (int i = 0; i < savedBooks.size(); i++){ //prints arraylist into file
+                myWriter.write(savedBooks.get(i)+"\n");
+            }
+            myReader.close();
+            myWriter.close();
+        }
+        catch (IOException e){
+            System.out.println("an Error occurred");
+            e.printStackTrace();
+        }
     }
 }
