@@ -10,54 +10,87 @@ import java.util.Scanner;
 public class Main {
 
     private static File booksFile = new File("books.txt");
+    private static File usersFile = new File("users.txt");
+    private static ArrayList<String> currentUser = new ArrayList<>();
 
     public static void main(String[] args) {
-        createFile();
+        createbooksFile();
+        createusersFile();
+        createArray();
+        //String i = "password";
+        //System.out.println(i.hashCode());
         boolean end = false;
         while (!end){
-            int selection = mainMenu();
-            if (selection == 1){
-                addBook();
+            System.out.println("Log in (1), Sign up (2) or Exit(3)?");
+            int choice = inputInt();
+            boolean accessGranted = false;
+            if (choice == 1){
+                accessGranted = logIn();
             }
-            else if (selection == 2){
-                printBooks();
+            else if (choice == 2){
+                signUp();
             }
-            else if (selection == 3){
-                System.out.println("Enter the name of the book: (if there are spaces use _ instead)");
-                deleteBook(findBook(inputString()));
-            }
-            else if (selection == 4){
-                System.out.println("What is the name of the book you want to amend");
-                String bookName = inputString();
-                System.out.println("Which part would you like to amend?");
-                System.out.println("1 - Title");
-                System.out.println("2 - ISBN");
-                System.out.println("3 - Author");
-                System.out.println("4 - Genre");
-                int selection1 = inputInt();
-                if (selection1 == 1){
-                    amendTitle(findBook(bookName));
-                }
-                else if (selection1 == 2){
-                    amendISBN(findBook(bookName));
-                }
-                else if (selection1 == 3){
-                    amendAuthor(findBook(bookName));
-                }
-                else if (selection1 == 4){
-                    amendGenre(findBook(bookName));
-                }
-                else{
-                    System.out.println("Please select a valid option");
-                }
-            }
-            else if (selection == 5){
+            else if (choice == 3){
                 end = true;
             }
             else{
-                System.out.println("please enter a valid option");
+                System.out.println("Please enter a valid option");
             }
-        }
+            while (accessGranted){
+                int selection = mainMenu();
+                if (selection == 1 && isAdmin()){
+                    addBook();
+                }
+                else if (selection == 2){
+                    printBooks();
+                }
+                else if (selection == 3 && isAdmin()){
+                    System.out.println("Enter the name of the book: (if there are spaces use _ instead)");
+                    deleteBook(findBook(inputString()));
+                }
+                else if (selection == 4 && isAdmin()){
+                    System.out.println("What is the name of the book you want to amend");
+                    String bookName = inputString();
+                    System.out.println("Which part would you like to amend?");
+                    System.out.println("1 - Title");
+                    System.out.println("2 - ISBN");
+                    System.out.println("3 - Author");
+                    System.out.println("4 - Genre");
+                    int selection1 = inputInt();
+                    if (selection1 == 1){
+                        amendTitle(findBook(bookName));
+                    }
+                    else if (selection1 == 2){
+                        amendISBN(findBook(bookName));
+                    }
+                    else if (selection1 == 3){
+                        amendAuthor(findBook(bookName));
+                    }
+                    else if (selection1 == 4){
+                        amendGenre(findBook(bookName));
+                    }
+                    else{
+                        System.out.println("Please select a valid option");
+                    }
+                }
+                else if (selection == 5){
+                    System.out.println("Enter the name of the book: (if there are spaces use _ instead)");
+                    System.out.println("What would you like to search by?");
+                    System.out.println("1 - Title");
+                    System.out.println("2 - ISBN");
+                    System.out.println("3 - Author");
+                    int selection1 = inputInt();
+                    findSpecificBook(findBook(inputString()));
+                }
+                else if (selection == 6){
+                    accessGranted = false;
+                }
+                else{
+                    System.out.println("please enter a valid option");
+                }
+            }
+            }
+
 
     }
 
@@ -128,11 +161,12 @@ public class Main {
 
     public static int mainMenu(){
         System.out.println("--Main Menu--");
-        System.out.println("1 - add a book to the system");
+        System.out.println("1 - add a book to the system *Admin only");
         System.out.println("2 - see the book list");
-        System.out.println("3 - remove a book from the system");
-        System.out.println("4 - amend a book");
-        System.out.println("5 - exit");
+        System.out.println("3 - remove a book from the system * Admin only");
+        System.out.println("4 - amend a book *Admin only");
+        System.out.println("5 - find a specific book");
+        System.out.println("6 - exit");
         return inputInt();
     }
 
@@ -168,7 +202,19 @@ public class Main {
         return out;
     }
 
-    public static void createFile(){
+    public static void createbooksFile(){
+        try {
+            if (booksFile.createNewFile()) {
+                System.out.println("File created: " + booksFile.getName());
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+    public static void createusersFile(){
         try {
             if (booksFile.createNewFile()) {
                 System.out.println("File created: " + booksFile.getName());
@@ -329,6 +375,149 @@ public class Main {
         catch (IOException e){
             System.out.println("an Error occurred");
             e.printStackTrace();
+        }
+    }
+    public static boolean logIn(){
+        System.out.println("Username:");
+        String username = inputString();
+        System.out.println("Password:");
+        String password = inputString();
+        password = Integer.toString(password.hashCode());
+        boolean valid = false;
+        try{
+            Scanner myReader = new Scanner(usersFile);
+            while(myReader.hasNextLine()){
+                String splitLine[] = myReader.nextLine().split(",");
+                System.out.println(splitLine);
+                if (splitLine[0].equals(username) && splitLine[1].equals(password)){
+                    valid = true;
+                    for (int i = 0; i < splitLine.length; i++){
+                        currentUser.set(i,splitLine[i]);
+                    }
+                }
+            }
+        }
+        catch (IOException e){
+            System.out.println("Error");
+            e.printStackTrace();
+        }
+        return valid;
+    }
+    public static void signUp(){
+        System.out.println("Enter Username: ");
+        String username = inputString();
+        System.out.println("Enter Password:");
+        String password = inputString();
+        System.out.println("Confirm Password:");
+        String confPassword = inputString();
+        if (password.equals(confPassword)){
+            password = Integer.toString(password.hashCode());
+            try{
+                FileWriter myWriter = new FileWriter(usersFile.getName(),true);
+                if (findUser(username)){
+                    System.out.println("That username already exists");
+                }
+                else{
+                    String toFile = username+","+password+"\n";
+                    System.out.println(toFile);
+                    myWriter.write(toFile);
+                }
+                myWriter.close();
+            }
+            catch(IOException e){
+                System.out.println("Error");
+                e.printStackTrace();
+            }
+        }
+        else{
+            System.out.println("Your passwords do not match");
+        }
+    }
+    public static boolean findUser(String name){
+        //finds the index of a book with a given title
+        int lineCount = 0;
+        int lineKey = -1;
+        boolean valid = false;
+        try{
+            Scanner myReader = new Scanner(usersFile);
+            int numLines = 1;
+            while(myReader.hasNextLine()) {
+                String currentLine = myReader.nextLine();
+                String splitList[] = currentLine.split(",");
+                //System.out.println(splitList[0]);
+                if (splitList[0].equals(name)) {
+                    lineKey = lineCount;
+                } else {
+                    lineCount++;
+                }
+                numLines++;
+            }
+        }
+        catch (IOException e){
+            System.out.println("an Error occurred");
+            e.printStackTrace();
+        }
+        if(lineKey >= 0){
+            valid = true;
+        }
+        return valid;
+    }
+
+
+    public static boolean isAdmin(){
+        boolean valid = false;
+        if (currentUser.get(2).equals("a")){
+            valid = true;
+        }
+        return valid;
+    }
+    public static int findUserIndex(String name){
+        //finds the index of a book with a given title
+        int lineCount = 0;
+        int lineKey = 0;
+        try{
+            Scanner myReader = new Scanner(usersFile);
+            while(myReader.hasNextLine()) {
+                String currentLine = myReader.nextLine();
+                String splitList[] = currentLine.split(",");
+                //System.out.println(splitList[0]);
+                if (splitList[0].equals(name)) {
+                    lineKey = lineCount;
+                } else {
+                    lineCount++;
+                }
+            }
+        }
+        catch (IOException e){
+            System.out.println("an Error occurred");
+            e.printStackTrace();
+        }
+        return lineKey;
+    }
+    public static void findSpecificBook(int bookIndex){
+        try{
+            String savedLine = "";
+            Scanner myReader = new Scanner(booksFile);
+            int count = 0;
+            while(myReader.hasNextLine()) { //saves all but 1 line to an arraylist
+                String currentLine = myReader.nextLine();
+                if (count == bookIndex){
+                    savedLine = currentLine;
+                }
+                count++;
+            }
+            System.out.println(savedLine);
+            myReader.close();
+        }
+        catch (IOException e){
+            System.out.println("an Error occurred");
+            e.printStackTrace();
+        }
+    }
+
+    public static void createArray(){
+        for(int i = 0; i < 3; i++){
+            currentUser.add("");
         }
     }
 }
