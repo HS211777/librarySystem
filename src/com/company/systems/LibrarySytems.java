@@ -1,5 +1,6 @@
 package com.company.systems;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,20 +11,8 @@ import com.company.objects.books;
 import com.company.systems.inputSystems;
 
 public class LibrarySytems {
-    public static void fileToObj(){
-        try{
-            Scanner myReader = new Scanner(booksFile);
-            while(myReader.hasNextLine()){
-                String data = myReader.nextLine();
+    private static File booksFile = new File("books.txt");
 
-            }
-            myReader.close();
-        }
-        catch (FileNotFoundException e){
-            System.out.println("Error found");
-            e.printStackTrace();
-        }
-    }
     public static void addBook(){
         try{
             FileWriter myWriter = new FileWriter(booksFile.getName(),true);
@@ -243,7 +232,7 @@ public class LibrarySytems {
     }
     public static boolean isAdmin(){
         boolean valid = false;
-        if (currentUser.get(2).equals("a")){
+        if (loginSystems.getCurrentUser().get(2).equals("false")){
             valid = true;
         }
         return valid;
@@ -267,5 +256,16 @@ public class LibrarySytems {
             System.out.println("an Error occurred");
             e.printStackTrace();
         }
+    }
+    public static void deleteFileContents(){
+        try{
+            FileWriter myWriter = new FileWriter(booksFile.getName(),false);
+            myWriter.write("");
+        }
+        catch (IOException e){
+            System.out.println("an Error occurred:");
+            e.printStackTrace();
+        }
+
     }
 }

@@ -1,12 +1,34 @@
 package com.company.systems;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
+
+import com.company.objects.users;
 import com.company.systems.inputSystems;
 
 
 public class loginSystems {
+    private static File usersFile = new File("users.txt");
+    private static ArrayList<String> currentUser = new ArrayList<>();
+
+    public static void createArray(){
+        for(int i = 0; i < 3; i++){
+            currentUser.add("");
+        }
+    }
+
+    public void getCurrentUser(){
+        ArrayList<String> out = new ArrayList<>();
+        if (!currentUser.isEmpty()){
+            out = currentUser;
+        }
+        return out;
+        //figure out a way to make current user never null
+    }
+
     public static boolean logIn(){
         System.out.println("Username:");
         String username = inputSystems.inputString();
@@ -48,7 +70,8 @@ public class loginSystems {
                     System.out.println("That username already exists");
                 }
                 else{
-                    String toFile = username+","+password+"\n";
+                    users myUser = new users(username,password,false);
+                    String toFile = myUser.toString() + "\n";
                     System.out.println(toFile);
                     myWriter.write(toFile);
                 }
@@ -94,8 +117,8 @@ public class loginSystems {
     }
     public static void createusersFile(){
         try {
-            if (booksFile.createNewFile()) {
-                System.out.println("File created: " + booksFile.getName());
+            if (usersFile.createNewFile()) {
+                System.out.println("File created: " + usersFile.getName());
             } else {
                 System.out.println("File already exists.");
             }
