@@ -19,7 +19,6 @@ public class Main {
     public static void main(String[] args) {
         LibrarySytems.createbooksFile();
         loginSystems.createusersFile();
-        loginSystems.createArray();
         //String i = "password";
         //System.out.println(i.hashCode());
         boolean end = false;
@@ -41,49 +40,50 @@ public class Main {
             }
             while (accessGranted){
                 int selection = menuSystems.mainMenu();
-                if (selection == 1 && LibrarySytems.isAdmin()){
+                if (selection == 1 && loginSystems.isAdmin()){
                     LibrarySytems.addBook();
                 }
                 else if (selection == 2){
                     LibrarySytems.printBooks();
                 }
-                else if (selection == 3 && LibrarySytems.isAdmin()){
+                else if (selection == 3 && loginSystems.isAdmin()){
                     System.out.println("Enter the name of the book: (if there are spaces use _ instead)");
-                    LibrarySytems.deleteBook(LibrarySytems.findBook(inputSystems.inputString()));
+                    LibrarySytems.deleteBook(LibrarySytems.findBookByTitle(inputSystems.inputString()));
                 }
-                else if (selection == 4 && LibrarySytems.isAdmin()){
+                else if (selection == 4 && loginSystems.isAdmin()){
                     System.out.println("What is the name of the book you want to amend");
                     String bookName = inputSystems.inputString();
-                    System.out.println("Which part would you like to amend?");
-                    System.out.println("1 - Title");
-                    System.out.println("2 - ISBN");
-                    System.out.println("3 - Author");
-                    System.out.println("4 - Genre");
-                    int selection1 = inputSystems.inputInt();
+                    int selection1 = menuSystems.amendBookMenu();
                     if (selection1 == 1){
-                        LibrarySytems.amendTitle(LibrarySytems.findBook(bookName));
+                        LibrarySytems.amendTitle(LibrarySytems.findBookByTitle(bookName));
                     }
                     else if (selection1 == 2){
-                        LibrarySytems.amendISBN(LibrarySytems.findBook(bookName));
+                        LibrarySytems.amendISBN(LibrarySytems.findBookByTitle(bookName));
                     }
                     else if (selection1 == 3){
-                        LibrarySytems.amendAuthor(LibrarySytems.findBook(bookName));
+                        LibrarySytems.amendAuthor(LibrarySytems.findBookByTitle(bookName));
                     }
                     else if (selection1 == 4){
-                        LibrarySytems.amendGenre(LibrarySytems.findBook(bookName));
+                        LibrarySytems.amendGenre(LibrarySytems.findBookByTitle(bookName));
                     }
                     else{
                         System.out.println("Please select a valid option");
                     }
                 }
                 else if (selection == 5){
-                    System.out.println("Enter the name of the book: (if there are spaces use _ instead)");
-                    System.out.println("What would you like to search by?");
-                    System.out.println("1 - Title");
-                    System.out.println("2 - ISBN");
-                    System.out.println("3 - Author");
-                    int selection1 = inputSystems.inputInt();
-                    LibrarySytems.findSpecificBook(LibrarySytems.findBook(inputSystems.inputString()));
+                    int selection1 = menuSystems.findBookMenu();
+                    if (selection1 == 1){
+                        LibrarySytems.findSpecificBook(LibrarySytems.findBookByTitle(inputSystems.inputString()));
+                    }
+                    else if (selection1 == 2){
+                        //isbn search
+                    }
+                    else if (selection1 == 3){
+                        //author name search
+                    }
+                    else{
+                        System.out.println("please enter a valid option");
+                    }
                 }
                 else if (selection == 6){
                     accessGranted = false;

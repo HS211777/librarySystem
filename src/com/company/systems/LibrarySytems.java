@@ -79,7 +79,7 @@ public class LibrarySytems {
             e.printStackTrace();
         }
     }
-    public static int findBook(String name){
+    public static int findBookByTitle(String name){
         //finds the index of a book with a given title
         int lineCount = 0;
         int lineKey = 0;
@@ -229,13 +229,6 @@ public class LibrarySytems {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-    }
-    public static boolean isAdmin(){
-        boolean valid = false;
-        if (loginSystems.getCurrentUser().get(2).equals("false")){
-            valid = true;
-        }
-        return valid;
     }
     public static void findSpecificBook(int bookIndex){
         try{

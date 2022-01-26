@@ -12,21 +12,10 @@ import com.company.systems.inputSystems;
 
 public class loginSystems {
     private static File usersFile = new File("users.txt");
-    private static ArrayList<String> currentUser = new ArrayList<>();
+    private static users currentUser = new users("","",false);
 
-    public static void createArray(){
-        for(int i = 0; i < 3; i++){
-            currentUser.add("");
-        }
-    }
-
-    public void getCurrentUser(){
-        ArrayList<String> out = new ArrayList<>();
-        if (!currentUser.isEmpty()){
-            out = currentUser;
-        }
-        return out;
-        //figure out a way to make current user never null
+    public static boolean isAdmin(){
+        return currentUser.isAdmin();
     }
 
     public static boolean logIn(){
@@ -43,9 +32,16 @@ public class loginSystems {
                 System.out.println(splitLine);
                 if (splitLine[0].equals(username) && splitLine[1].equals(password)){
                     valid = true;
-                    for (int i = 0; i < splitLine.length; i++){
-                        currentUser.set(i,splitLine[i]);
+                    boolean admin;
+                    if (splitLine[2].equals("true")){
+                        admin = true;
                     }
+                    else{
+                        admin = false;
+                    }
+                    currentUser.setUsername(splitLine[0]);
+                    currentUser.setPassword(splitLine[1]);
+                    currentUser.setAdmin(admin);
                 }
             }
         }
